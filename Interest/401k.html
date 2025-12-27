@@ -3,52 +3,142 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>401(k) Calculator – Pro Max</title>
+<title>401(k) Calculator</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
 :root{
-  --bg:#f3f6fb;--card:#fff;--primary:#2563eb;
-  --success:#16a34a;--danger:#dc2626;
-  --text:#0f172a;--muted:#64748b;--border:#e5e7eb;
-  --radius:18px;--shadow:0 20px 40px rgba(0,0,0,.08);
+  --bg:#f3f6fb;
+  --card:#ffffff;
+  --primary:#2563eb;
+  --success:#16a34a;
+  --text:#0f172a;
+  --muted:#64748b;
+  --border:#e5e7eb;
+  --radius:18px;
+  --shadow:0 20px 40px rgba(0,0,0,.08);
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:Inter,system-ui;background:var(--bg);color:var(--text)}
-.container{max-width:1200px;margin:auto;padding:18px}
-h1{text-align:center;color:var(--primary)}
-.grid{display:grid;grid-template-columns:1fr 1.3fr;gap:24px}
-.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px}
-label{font-size:14px;margin-top:14px;display:block}
-input,select{width:100%;padding:12px;margin-top:6px;border:1px solid var(--border);border-radius:10px}
-button{width:100%;margin-top:16px;padding:15px;font-size:16px;background:var(--primary);color:#fff;border:none;border-radius:14px}
-.summary{padding:16px;border-radius:14px;margin-bottom:16px}
-.good{background:#ecfdf5;border-left:6px solid var(--success)}
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-.stat{background:#f8fafc;padding:14px;border-radius:12px;text-align:center}
-.stat .value{font-size:22px;font-weight:700;color:var(--primary)}
-.stat .label{font-size:13px;color:var(--muted)}
-table{width:100%;border-collapse:collapse;margin-top:18px}
-th,td{border:1px solid var(--border);padding:10px;text-align:center}
+body{
+  margin:0;
+  font-family:Inter,system-ui,Arial;
+  background:var(--bg);
+  color:var(--text);
+}
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:18px;
+}
+h1{
+  text-align:center;
+  color:var(--primary);
+  margin-bottom:24px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1.3fr;
+  gap:24px;
+}
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:22px;
+}
+label{
+  display:block;
+  margin-top:14px;
+  font-size:14px;
+}
+input,select{
+  width:100%;
+  padding:12px;
+  margin-top:6px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  font-size:15px;
+}
+button{
+  width:100%;
+  margin-top:16px;
+  padding:15px;
+  font-size:16px;
+  border:none;
+  border-radius:14px;
+  cursor:pointer;
+}
+.primary{
+  background:var(--primary);
+  color:#fff;
+}
+.secondary{
+  background:#eef2ff;
+  color:var(--primary);
+  border:1px solid #c7d2fe;
+}
+.summary{
+  background:#ecfdf5;
+  border-left:6px solid var(--success);
+  padding:16px;
+  border-radius:14px;
+  margin-bottom:16px;
+}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
+.stat{
+  background:#f8fafc;
+  padding:14px;
+  border-radius:12px;
+  text-align:center;
+}
+.stat .value{
+  font-size:22px;
+  font-weight:700;
+  color:var(--primary);
+}
+.stat .label{
+  font-size:13px;
+  color:var(--muted);
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:20px;
+}
+th,td{
+  border:1px solid var(--border);
+  padding:10px;
+  text-align:center;
+}
 th{background:#f1f5f9}
 canvas{margin-top:24px}
-@media(max-width:900px){.grid{grid-template-columns:1fr}}
+@media(max-width:900px){
+  .grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 
 <body>
-<div class="container" id="report">
+<div class="container">
 <h1>401(k) Calculator</h1>
 
 <div class="grid">
 
 <!-- INPUT -->
 <div class="card">
-<label>Current Age</label><input id="age" value="30">
-<label>Retirement Age</label><input id="retire" value="65">
-<label>Annual Salary ($)</label><input id="salary" value="70000">
+<label>Current Age</label>
+<input id="age" value="30">
+
+<label>Retirement Age</label>
+<input id="retire" value="65">
+
+<label>Annual Salary ($)</label>
+<input id="salary" value="70000">
 
 <label>Employee Contribution (% of salary)</label>
 <input id="empPct" value="6">
@@ -58,31 +148,49 @@ canvas{margin-top:24px}
 
 <label>401(k) Type</label>
 <select id="type">
-  <option value="traditional">Traditional 401(k)</option>
-  <option value="roth">Roth 401(k)</option>
+  <option>Traditional 401(k)</option>
+  <option>Roth 401(k)</option>
 </select>
 
-<label>Annual Return (%)</label><input id="rate" value="7">
-<label>Inflation (%)</label><input id="inflation" value="3">
-<label>Current 401(k) Balance ($)</label><input id="current" value="20000">
+<label>Annual Return (%)</label>
+<input id="rate" value="7">
 
-<button onclick="calculate()">Calculate</button>
-<button onclick="exportPDF()">Download PDF</button>
+<label>Inflation (%)</label>
+<input id="inflation" value="3">
+
+<label>Current 401(k) Balance ($)</label>
+<input id="current" value="20000">
+
+<button class="primary" onclick="calculate()">Calculate</button>
+<button class="secondary" onclick="clearForm()">Clear</button>
+<button class="secondary" onclick="downloadCSV()">Download CSV</button>
 </div>
 
 <!-- OUTPUT -->
 <div class="card">
-<div id="summary" class="summary good"></div>
+<div id="summary" class="summary">
+<strong>Projected 401(k) balance at retirement.</strong>
+</div>
 
 <div class="stats">
-  <div class="stat"><div class="value" id="total"></div><div class="label">Balance at Retirement</div></div>
-  <div class="stat"><div class="value" id="contri"></div><div class="label">Total Contributions</div></div>
+  <div class="stat">
+    <div class="value" id="total">—</div>
+    <div class="label">Balance at Retirement</div>
+  </div>
+  <div class="stat">
+    <div class="value" id="contri">—</div>
+    <div class="label">Total Contributions</div>
+  </div>
 </div>
 
 <h3>Scenario Comparison</h3>
 <table>
 <thead>
-<tr><th>Scenario</th><th>Return</th><th>Final Balance</th></tr>
+<tr>
+  <th>Scenario</th>
+  <th>Return</th>
+  <th>Final Balance</th>
+</tr>
 </thead>
 <tbody id="scenarios"></tbody>
 </table>
@@ -95,71 +203,91 @@ canvas{margin-top:24px}
 
 <script>
 let chart;
-const IRS_LIMIT = 23000;
-const CATCHUP = 7500;
 
 function money(x){
- return "$"+Number(x).toLocaleString(undefined,{maximumFractionDigits:0});
+  return "$"+Number(x).toLocaleString(undefined,{maximumFractionDigits:0});
 }
 
 function simulate(extraRate=0){
- let a=+age.value,r=+retire.value;
- let bal=+current.value;
- let sal=+salary.value;
- let emp=+empPct.value/100;
- let match=+matchPct.value/100;
- let rateR=(+rate.value+extraRate)/100;
- let inf=+inflation.value/100;
- let real=(1+rateR)/(1+inf)-1;
+  let a=+age.value,r=+retire.value;
+  let bal=+current.value;
+  let sal=+salary.value;
+  let emp=+empPct.value/100;
+  let match=+matchPct.value/100;
+  let rateR=(+rate.value+extraRate)/100;
+  let annual=sal*(emp+match);
 
- let contribTotal=0,labels=[],data=[];
+  let labels=[],data=[],totalContrib=0;
 
- for(let i=a;i<r;i++){
-   let limit=IRS_LIMIT + (i>=50?CATCHUP:0);
-   let empCon=Math.min(sal*emp,limit);
-   let matchCon=sal*match;
-   let yearly=empCon+matchCon;
-   contribTotal+=yearly;
-   bal=bal*(1+real)+yearly;
-   labels.push("Age "+(i+1));
-   data.push(bal);
- }
- return {bal,contribTotal,labels,data};
+  for(let i=a;i<r;i++){
+    totalContrib+=annual;
+    bal=bal*(1+rateR)+annual;
+    labels.push("Age "+(i+1));
+    data.push(bal);
+  }
+  return {bal,totalContrib,labels,data};
 }
 
 function calculate(){
- let base=simulate(0);
- let opt=simulate(2);
- let con=simulate(-2);
+  let base=simulate(0);
+  let opt=simulate(2);
+  let con=simulate(-2);
 
- total.innerHTML=money(base.bal);
- contri.innerHTML=money(base.contribTotal);
+  total.innerHTML=money(base.bal);
+  contri.innerHTML=money(base.totalContrib);
 
- summary.innerHTML=
-  "Projected "+(type.value==="roth"?"tax-free ":"")+"401(k) balance at retirement.";
+  scenarios.innerHTML=`
+    <tr><td>Base</td><td>${rate.value}%</td><td>${money(base.bal)}</td></tr>
+    <tr><td>Optimistic</td><td>${+rate.value+2}%</td><td>${money(opt.bal)}</td></tr>
+    <tr><td>Conservative</td><td>${+rate.value-2}%</td><td>${money(con.bal)}</td></tr>
+  `;
 
- scenarios.innerHTML=`
- <tr><td>Base</td><td>${rate.value}%</td><td>${money(base.bal)}</td></tr>
- <tr><td>Optimistic</td><td>${+rate.value+2}%</td><td>${money(opt.bal)}</td></tr>
- <tr><td>Conservative</td><td>${+rate.value-2}%</td><td>${money(con.bal)}</td></tr>
- `;
-
- if(chart)chart.destroy();
- chart=new Chart(growth,{
-  type:"line",
-  data:{labels:base.labels,
-    datasets:[{label:"401(k) Growth",data:base.data,borderWidth:2}]
-  }
- });
+  if(chart) chart.destroy();
+  chart=new Chart(growth,{
+    type:"line",
+    data:{
+      labels:base.labels,
+      datasets:[{
+        label:"401(k) Growth",
+        data:base.data,
+        borderWidth:2
+      }]
+    }
+  });
 }
 
-function exportPDF(){
- html2pdf().set({
-  margin:10,
-  filename:"401k-Retirement-Plan.pdf",
-  html2canvas:{scale:2},
-  jsPDF:{unit:"mm",format:"a4"}
- }).from(document.getElementById("report")).save();
+function clearForm(){
+  document.querySelectorAll("input").forEach(i=>i.value="");
+  document.querySelectorAll("select").forEach(s=>s.selectedIndex=0);
+  total.innerHTML="—";
+  contri.innerHTML="—";
+  scenarios.innerHTML="";
+  if(chart) chart.destroy();
+}
+
+function downloadCSV(){
+  const rows=[
+    ["Field","Value"],
+    ["Current Age",age.value],
+    ["Retirement Age",retire.value],
+    ["Annual Salary",salary.value],
+    ["Employee Contribution %",empPct.value],
+    ["Employer Match %",matchPct.value],
+    ["401(k) Type",type.value],
+    ["Annual Return %",rate.value],
+    ["Inflation %",inflation.value],
+    ["Current Balance",current.value],
+    ["Final Balance",total.innerText],
+    ["Total Contributions",contri.innerText]
+  ];
+  let csv=rows.map(r=>r.join(",")).join("\n");
+  let blob=new Blob([csv],{type:"text/csv"});
+  let url=URL.createObjectURL(blob);
+  let a=document.createElement("a");
+  a.href=url;
+  a.download="401k-calculation.csv";
+  a.click();
+  URL.revokeObjectURL(url);
 }
 </script>
 
